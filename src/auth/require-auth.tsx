@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { ScreenLoader } from '@/components/common/screen-loader';
 import { useAuth } from './context/auth-context';
+import { Outlet } from 'react-router';
 
 /**
  * Component to protect routes that require authentication.
@@ -9,21 +9,19 @@ import { useAuth } from './context/auth-context';
  */
 export const RequireAuth = () => {
   const { auth, verify, loading: globalLoading } = useAuth();
-  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const verificationStarted = useRef(false);
+  const { VITE_SSO_LOGIN } = import.meta.env;
 
   useEffect(() => {
     const checkAuth = async () => {
-      if (!auth?.access_token || !verificationStarted.current) {
+      if (!auth?.token || !verificationStarted.current) {
         verificationStarted.current = true;
         try {
           await verify();
         } finally {
           setLoading(false);
         }
-      } else {
-        setLoading(false);
       }
     };
 
@@ -36,13 +34,8 @@ export const RequireAuth = () => {
   }
 
   // If not authenticated, redirect to login
-  if (!auth?.access_token) {
-    return (
-      <Navigate
-        to={`/auth/signin?next=${encodeURIComponent(location.pathname)}`}
-        replace
-      />
-    );
+  if (!auth?.token && !loading) {
+    window.location.href = VITE_SSO_LOGIN;
   }
 
   // If authenticated, render child routes

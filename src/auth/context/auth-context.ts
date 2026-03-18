@@ -1,31 +1,15 @@
 import { createContext, useContext } from 'react';
-import type {AuthModel, UserModel} from '@/auth/lib/models';
 
 // Create AuthContext with types
 export const AuthContext = createContext<{
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  auth?: AuthModel;
-  saveAuth: (auth: AuthModel | undefined) => void;
-  user?: UserModel;
-  setUser: React.Dispatch<React.SetStateAction<UserModel | undefined>>;
-  login: (email: string, password: string) => Promise<void>;
-  register: (
-    email: string,
-    password: string,
-    password_confirmation: string,
-    firstName?: string,
-    lastName?: string,
-  ) => Promise<void>;
-  requestPasswordReset: (email: string) => Promise<void>;
-  resetPassword: (
-    password: string,
-    password_confirmation: string,
-  ) => Promise<void>;
-  resendVerificationEmail: (email: string) => Promise<void>;
-  getUser: () => Promise<UserModel | null>;
-  updateProfile: (userData: Partial<UserModel>) => Promise<UserModel>;
-  logout: () => void;
+  auth?: SessionInterface;
+  saveAuth: (auth: SessionInterface | undefined) => void;
+  user?: UserInterface;
+  setUser: React.Dispatch<React.SetStateAction<UserInterface | undefined>>;
+  login: (token: string) => Promise<void>;
+  getUser: () => Promise<UserInterface | null>;
   verify: () => Promise<void>;
   isAdmin: boolean;
 }>({
@@ -34,13 +18,7 @@ export const AuthContext = createContext<{
   saveAuth: () => {},
   setUser: () => {},
   login: async () => {},
-  register: async () => {},
-  requestPasswordReset: async () => {},
-  resetPassword: async () => {},
-  resendVerificationEmail: async () => {},
   getUser: async () => null,
-  updateProfile: async () => ({}) as UserModel,
-  logout: () => {},
   verify: async () => {},
   isAdmin: false,
 });

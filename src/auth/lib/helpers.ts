@@ -1,5 +1,4 @@
 import { getData, setData } from '@/lib/storage';
-import type {AuthModel} from './models';
 
 const AUTH_LOCAL_STORAGE_KEY = `${import.meta.env.VITE_APP_NAME}-auth-v${
   import.meta.env.VITE_APP_VERSION || '1.0'
@@ -8,9 +7,11 @@ const AUTH_LOCAL_STORAGE_KEY = `${import.meta.env.VITE_APP_NAME}-auth-v${
 /**
  * Get stored auth information from local storage
  */
-const getAuth = (): AuthModel | undefined => {
+const getAuth = (): SessionInterface | undefined => {
   try {
-    const auth = getData(AUTH_LOCAL_STORAGE_KEY) as AuthModel | undefined;
+    const auth = getData(AUTH_LOCAL_STORAGE_KEY) as
+      | SessionInterface
+      | undefined;
     return auth;
   } catch (error) {
     console.error('AUTH LOCAL STORAGE PARSE ERROR', error);
@@ -20,7 +21,7 @@ const getAuth = (): AuthModel | undefined => {
 /**
  * Save auth information to local storage
  */
-const setAuth = (auth: AuthModel) => {
+const setAuth = (auth: SessionInterface) => {
   setData(AUTH_LOCAL_STORAGE_KEY, auth);
 };
 
