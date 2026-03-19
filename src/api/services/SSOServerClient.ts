@@ -5,7 +5,6 @@ export default class SSOServerClient {
 
   getUMOUser(token_auth: string): Promise<UMOUserInterface> {
     return this.client
-      .setAuthToken(import.meta.env.VITE_TOKEN_AUTH_SSO)
       .updateDefaultHeaders({
         broker: import.meta.env.VITE_SSO_BROKER_NAME,
         token: token_auth,
